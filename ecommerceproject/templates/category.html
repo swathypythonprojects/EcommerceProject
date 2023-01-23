@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block metadescription %}
+{% if category %}
+     {{ category.desc|truncatewords:155 }}
+{% else %}
+     Welcome to Essentials Store...
+{% endif %}
+{% endblock %}
+
+{% block title %}
+{% if category %}
+     {{ category.name }}  - Essentials Store
+{% else %}
+     See our New Collections... - Essentials Store
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+<div>
+     <div class="row my_row_class">
+          <div class="mx-auto">
+               <p><a href="{% url 'shop:allProdCat' %}">Our Product Collections</a></p>
+          </div>
+
+     </div>
+</div>
+{% endif %}
+<div class="mx-auto">
+     {% if category %}
+    <center> <img class="my_image" src="{{category.img.url}}" alt="{{category.name}}" style="width:590px;height:490px;"></center>
+</div>
+<br>
+<div>
+     <h1 class="text-center my_title">{{category.name}}</h1>
+     <p class="text-justify">{{category.desc}}</p>
+</div>
+{% else %}
+<div>
+     <img class="my_image my_image_padding"  src="{% static 'img/banner.png' %}" alt="Our Products" width="590px" height="1900px">
+</div>
+<br><br>
+<div>
+     <h1 class="text-center my_title">Our Products Collections</h1><br>
+     <p class="text-justify">
+A diet rich in vegetables and fruits can lower blood pressure, reduce the risk of heart disease and stroke, prevent some types of cancer, lower risk of eye and digestive problems, and have a positive effect upon blood sugar, which can help keep appetite in check. Eating non-starchy vegetables and fruits like apples, pears, and green leafy vegetables may even promote weight loss. [1] Their low glycemic loads prevent blood sugar spikes that can increase hunger.At least nine different families of fruits and vegetables exist, each with potentially hundreds of different plant compounds that are beneficial to health. Eat a variety of types and colors of produce in order to give your body the mix of nutrients it needs. This not only ensures a greater diversity of beneficial plant chemicals but also creates eye-appealing meals.Fruits and vegetables contain indigestible fiber, which absorbs water and expands as it passes through the digestive system. This can calm symptoms of an irritable bowel and, by triggering regular bowel movements, can relieve or prevent constipation.The bulking and softening action of insoluble fiber also decreases pressure inside the intestinal tract and may help prevent diverticulosis.</p>
+</div>
+<br><br><br>
+     {% endif %}
+
+<div class="container">
+     <div class="row mx-auto">
+          {% for product in products.object_list %}
+          <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4">
+               <div class="card text-center" style="min_width:18rem;">
+                   <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.img.url}}" alt="{{product.name}}" style="width:300px;height:300px"></a>
+
+                   <div class="card-body">
+                     <h4>{{product.name}}</h4>
+                     <p>{{product.price}}</p>
+
+                   </div>
+               </div>
+               <br><br><br><br>
+          </div>
+          {% endfor %}
+     </div>
+     <div class="mx-auto">
+          {% if products.paginator.num_pages > 1 %}
+          <hr>
+          <div class="text-center">
+               {% for pg in products.paginator.page_range %}
+                  <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+               {% endfor %}
+          </div>
+          {% endif %}
+     </div>
+     <br>
+</div>
+{% endblock %}
+
